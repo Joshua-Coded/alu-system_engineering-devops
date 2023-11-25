@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Update package lists
+sudo apt update
+
+# Install Nginx if not already installed
+sudo apt install -y nginx
+
+# Create a backup of the default Nginx configuration
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+
+# Configure Nginx for custom 404 page
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOL
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location /404 {
+        internal;
+        alias /var/www/html/404.html;
+    }
+
+    error_page 404 /404;
+
+    # Other server configurations...
+}
+EOL
+
+# Create the custom 404 page
+sudo tee /var/www/html/404.html > /dev/null <<EOL
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404 Not Found</h1>
+    <p>Ceci n'est pas une page.</p>
+</body>
+</html>
+EOL
+
+# Set ownership and permissions for the custom 404 page
+sudo chown www-data:www-data /var/www/html/404.html
+sudo chmod 644 /var/www/html/404.html
+
+# Reload Nginx to apply the changes
+sudo systemctl reload nginx
+
