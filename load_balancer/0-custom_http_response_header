@@ -10,4 +10,5 @@ sudo ufw allow 'Nginx HTTP'
 echo 'Hello World!' |sudo tee /var/www/html/index.html
 
 custom_header="server_name _;\n\tadd_header X-Served-By \$HOSTNAME;"
-sudo sed -i "s|server_name _;|$custom
+sudo sed -i "s|server_name _;|$custom_header|" /etc/nginx/sites-enabled/default
+sudo service nginx restart
