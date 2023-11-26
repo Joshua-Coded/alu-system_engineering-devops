@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#Install and config Ngin
+#Install and config Nginx
 sudo apt update -y
 sudo apt install nginx -y
 new_config=\
@@ -13,5 +13,4 @@ new_config=\
 }
 "
 sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/default
-echo "$new_config" > /etc/nginx/sites-available/default
-sudo service nginx restart
+echo "$new_config" > /etc
