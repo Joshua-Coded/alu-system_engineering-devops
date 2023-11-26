@@ -3,7 +3,7 @@
 sudo apt update -y
 sudo apt install nginx -y
 new_config=\
-"server {
+server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 		root /var/www/html;
@@ -11,6 +11,6 @@ new_config=\
 	server_name _;
 	add_header X-Served-By $HOSTNAME;
 }
-"
+
 sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/default
 echo "$new_config" > /etc
