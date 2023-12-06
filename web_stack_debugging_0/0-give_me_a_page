@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# this is my first web debugging script for printing hello holberton
+
+# start docker container
+docker run -p 8080:80 -d holbertonschool/256-0
+
+#get container ID
+CONTAINER_ID=$(docker ps -q)
+
+# connect to the container
+docker exec -it "$CONTAINER_ID" /bin/bash
+
+# ensure apache service is running
+service apache2 start
+
+# check apache service status
+service apache2 status
+cat /var/log/apache2/error.log
+
+# navigate to the document root and create / edit index.html
+
+cd /var/www/html
+echo "Hello Holberton" > index.html
+
+# exit the root env
+
+exit
+
+ 
+ 
