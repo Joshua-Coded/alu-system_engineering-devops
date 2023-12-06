@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-# debugging nginx (service (init) must say that nginx is not running)
-sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-service nginx restart
-pkill -o nginx
+#!/bin/bash
+# make it work
+apt-get update && apt-get install -y nginx
+service nginx start
+nginx -t 2>&1 | grep server | grep 'listen 80;' | awk '{print $2}' | sed -i "/listen 80;/c\listen 80; listen $(ip -o address show dev eth0 | awk '/inet/ {print $2}')" nginx -s reload
+
