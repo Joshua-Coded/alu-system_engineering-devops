@@ -1,6 +1,6 @@
-#!/bin/bash
-# make it work
+#!/usr/bin/env bash
+# Install and configure Nginx
 apt-get update && apt-get install -y nginx
-service nginx start
-nginx -t 2>&1 | grep server | grep 'listen 80;' | awk '{print $2}' | sed -i "/listen 80;/c\listen 80; listen $(ip -o address show dev eth0 | awk '/inet/ {print $2}')" nginx -s reload
+echo "listen 80;" | tee /etc/nginx/sites-available/default /etc/init.d/nginx start
+service nginx status | grep -q "not running" && echo "nginx is not running"
 
