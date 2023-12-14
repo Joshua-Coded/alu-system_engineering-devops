@@ -1,17 +1,5 @@
-#!/usr/bin/env bash
-# Ensure the user is running the script with elevated privileges
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root or with sudo."
-    exit 1
-fi
-# Fix web server to run Nginx as the nginx user listening on port 8080
-sed -i "s/#user www-data/user nginx/" /etc/nginx/nginx.conf
-sed -i "s/80/8080/g" /etc/nginx/sites-available/default
-chmod 644 /etc/nginx/nginx.conf
-# Stop Apache if running
-pkill apache2
-# Adjust ownership and permissions for Nginx logs
-chown -R nginx:nginx /var/log/nginx
-chmod -R 755 /var/log/nginx
-# Start Nginx as the nginx user
-nginx -g 'daemon off;'
+#!/bin/bash
+# start nginx in 7 lines
+sed -i 's/#user www-data;/user nginx;/' /etc/nginx/nginx.conf
+sed -i 's/listen 80;/listen 8080;/g' /etc/nginx/sites-available/default
+nginx -t && service nginx restart
