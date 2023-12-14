@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Create the necessary directories with correct permissions
 mkdir -p /var/cache/nginx/client_temp
 chown -R nginx:nginx /var/cache/nginx
