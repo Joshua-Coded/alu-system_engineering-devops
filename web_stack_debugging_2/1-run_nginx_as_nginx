@@ -1,8 +1,14 @@
-#!/usr/bin/env bash
-# nginx as nginx user
-# nginx must be listening on all active IPs on port 8080
-pkill -f apache2
-chmod 644 /etc/nginx/nginx.conf
-sed -i 's/80/8080 default_server/g' /etc/nginx/sites-available/default
-sed -i '1 i user nginx;' /etc/nginx/nginx.conf
-sudo -u nginx service nginx restart
+#!/bin/bash
+# Set the nginx user in the nginx configuration
+sed -i 's/#user www-data;/user nginx;/' /etc/nginx/nginx.conf
+# Update the default server block to listen on port 8080
+sed -i 's/listen 80;/listen 8080;/g' /etc/nginx/sites-available/default
+# Test the nginx configuration
+nginx -t
+# If the configuration test is successful, restart nginx
+if [ $? -eq 0 ]; then
+    service nginx restart
+    echo "Nginx has been configured to listen on port 8080."
+else
+    echo "Nginx configuration test failed. Please check the configuration."
+fi
